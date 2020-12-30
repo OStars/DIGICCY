@@ -1,0 +1,602 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- 上述3个meta标签*必须*放在最前面，任何其他内容都*必须*跟随其后！ -->
+    <title>anti-moneyLaundering</title>
+    <link rel="stylesheet" href="css/style.css">
+
+    <!--Bootstrap-->
+<!--    <link href="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/css/bootstrap.min.css" rel="stylesheet">-->
+<!--    &lt;!&ndash; jQuery (Bootstrap 的所有 JavaScript 插件都依赖 jQuery，所以必须放在前边) &ndash;&gt;-->
+<!--    <script src="https://cdn.jsdelivr.net/npm/jquery@1.12.4/dist/jquery.min.js"></script>-->
+<!--    &lt;!&ndash; 加载 Bootstrap 的所有 JavaScript 插件。你也可以根据需要只加载单个插件。 &ndash;&gt;-->
+<!--    <script src="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/js/bootstrap.min.js"></script>-->
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.0/dist/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script type="text/javascript" src="javascript/lib/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.0/dist/js/bootstrap.min.js" integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI" crossorigin="anonymous"></script>
+    <!-- 新 Bootstrap4 核心 CSS 文件-->
+<!--    <link rel="stylesheet" href="./stylesheets/bootstrap.min.css">-->
+<!--    <script src="./javascript/lib/jquery.min.js"></script>-->
+<!--    <script src="./javascript/lib/popper.min.js"></script>-->
+<!--    <script src="./javascript/lib/bootstrap.min.js"></script>-->
+<!--    <script src="./javascript/lib/d3.v5.min.js"></script>-->
+    <script src="https://d3js.org/d3.v5.min.js"></script>
+
+<!--    <script type="text/javascript" src="./plug/jquery-1.11.3.min.js"></script>-->
+<!--    <script type="text/javascript" src="./plug/bootstrap-3.3.5-dist/js/bootstrap.min.js"></script>-->
+<!--    <script type="text/javascript" src="./plug/d3.min.js"></script>-->
+<!--    <script type="text/javascript" src="./plug/jquery-ui.js"></script>-->
+<!--    <script type="text/javascript" src="./plug/jquery.magnify.js"></script>-->
+<!--    <script type="text/javascript" src="./plug/jquery.dragsort.js"></script>-->
+    <script type="text/javascript" src="./js/event.js"></script>
+<!--    <script type="text/javascript" src="./plug/jquery.js"></script>-->
+
+    <script src="./javascript/lib/buchuan1023.js"></script>
+    <script src="./javascript/Util_getData.js"></script>
+    <script src="./javascript/Layout_Ours.js"></script>
+    <script src="./javascript/Util_DrawGraph.js"></script>
+    <script src="./javascript/Util_getLabelsData.js"></script>
+    <script src="./javascript/Util_AssignmentColor.js"></script>
+    <script src="./javascript/Global.js"></script>
+    <script src="./javascript/_Entrance_.js"></script>
+</head>
+
+<body style="background-color: #eaeff5; margin: 0 auto">
+    <div style="position: absolute; overflow: hidden; height: 800px; margin: 0 auto; left: 50%; transform: translateX(-50%); width: 95%">
+        <div id="leftContainer" class="box">
+            <div id="leftTop" style="background-color: #FFFFFF; height: 23%">
+                <div class="navStripe">
+                    <span class="glyphicon glyphicon-list"></span>用户洗钱值排名
+                </div>
+                <div id="tabContent" class="tab choose" style="height: 100%; position: relative">
+                    <div id="tableDiv" style="height: 74%; overflow: scroll; overflow-x: hidden">
+                        <table id="rankTable" class="table table-hover table-striped" style="max-height: 800px">
+                            <thead>
+                            <tr>
+                                <th>member_id</th>
+                                <th>value</th>
+                            </tr>
+                            </thead>
+                            <tbody id="rank">
+                            <tr onclick="chooseMember(69863)">
+                                <td>69863</td>
+                                <td>100</td>
+                            </tr>
+                            <tr onclick="chooseMember(108331)">
+                                <td>108331</td>
+                                <td>94.2</td>
+                            </tr>
+                            <tr onclick="chooseMember(109189)">
+                                <td>109189</td>
+                                <td>91.8</td>
+                            </tr>
+                            <tr onclick="chooseMember(109595)">
+                                <td>109595</td>
+                                <td>87.6</td>
+                            </tr>
+                            <tr>
+                                <td>68963</td>
+                                <td>100</td>
+                            </tr>
+                            <tr>
+                                <td>68963</td>
+                                <td>100</td>
+                            </tr>
+                            <tr>
+                                <td>68963</td>
+                                <td>100</td>
+                            </tr>
+                            <tr>
+                                <td>68963</td>
+                                <td>100</td>
+                            </tr>
+                            <tr>
+                                <td>68963</td>
+                                <td>100</td>
+                            </tr>
+                            <tr>
+                                <td>68963</td>
+                                <td>100</td>
+                            </tr>
+                            <tr>
+                                <td>68963</td>
+                                <td>100</td>
+                            </tr>
+                            <tr>
+                                <td>68963</td>
+                                <td>100</td>
+                            </tr>
+                            <tr>
+                                <td>68963</td>
+                                <td>100</td>
+                            </tr><tr>
+                                <td>68963</td>
+                                <td>100</td>
+                            </tr>
+                            <tr>
+                                <td>68963</td>
+                                <td>100</td>
+                            </tr>
+                            <tr>
+                                <td>68963</td>
+                                <td>100</td>
+                            </tr>
+                            <tr>
+                                <td>68963</td>
+                                <td>100</td>
+                            </tr>
+                            <tr>
+                                <td>68963</td>
+                                <td>100</td>
+                            </tr>
+                            <tr>
+                                <td>68963</td>
+                                <td>100</td>
+                            </tr>
+                            <tr>
+                                <td>68963</td>
+                                <td>100</td>
+                            </tr>
+                            <tr>
+                                <td>68963</td>
+                                <td>100</td>
+                            </tr>
+                            <tr>
+                                <td>68963</td>
+                                <td>100</td>
+                            </tr>
+                            <tr>
+                                <td>68963</td>
+                                <td>100</td>
+                            </tr>
+                            <tr>
+                                <td>68963</td>
+                                <td>100</td>
+                            </tr>
+                            <tr>
+                                <td>68963</td>
+                                <td>100</td>
+                            </tr>
+                            <tr>
+                                <td>68963</td>
+                                <td>100</td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <div id="leftBottom" style="background-color: #FFFFFF; height: 77%">
+                <div class="navStripe">
+                    <span class="glyphicon glyphicon-stats"></span>洗钱指标
+                </div>
+                <div id="member" style="height: 18%">
+                    <div id="portrait">
+                        <img src="images/head.png">
+                    </div>
+                    <div id="values">
+                        <h3>用户洗钱值</h3>
+                        <span>100</span>
+                    </div>
+                </div>
+                <div id="picB" style="height: 76%; overflow: scroll; overflow-x: hidden">
+
+                </div>
+            </div>
+        </div>
+
+        <div id="rightContainer" style="margin: 8px;">
+            <div id="rightTopTimeline" style="height: 19%; background-color: #FFFFFF; margin-bottom: 10px;">
+                <div class="navStripe">
+                    <span class="glyphicon glyphicon-pencil"></span>洗钱值视图
+                </div>
+                <div id="timeLine" style="width: 845.5px; height: 90px; position: relative"></div>
+                <div id="timeLineSelect" style="display: none; margin-bottom: 10px; width: 845.5px; height: 46px; position: relative"></div>
+            </div>
+            <div id="rightTop" style="background-color: #FFFFFF; position: relative">
+                <div class="navStripe">
+                    <span class="glyphicon glyphicon-bitcoin"></span>钱包余额视图
+                </div>
+                <div id="picC"></div>
+                <div id="back" style="display: none; width: 15px; height: 15px;position: absolute; top: 50%; left: 50%; transform: translateX(-50%) translateY(-50%)">
+                    <img style="width: 100%; height: 100%" src="images/right.png">
+                </div>
+                <div id="otherPicC"></div>
+            </div>
+            <div id="rightBottom" style="background-color: #FFFFFF">
+                <div class="navStripe">
+                    <span class="glyphicon glyphicon-th"></span>行为序列视图
+                </div>
+                <div class="toggle-button-wrapper" style="display: none">
+                    <span>是否上拨</span>
+                    <input type="checkbox" id="toggle-button" name="switch">
+                    <label for="toggle-button" class="button-label">
+                        <span class="circle"></span>
+                        <span class="text on">ON</span>
+                        <span class="text off">OFF</span>
+                    </label>
+                </div>
+                <div id="accountCutline" style="display: none">
+                    <div class="cutline">
+                        <div class="symbolColor" style="background-color: #2C9E93"></div>
+                        <span class="symbolName" style="font-family: myFont">USDT计价</span>
+                    </div>
+                    <div class="cutline">
+                        <div class="symbolColor" style="background-color: #0C5460"></div>
+                        <span class="symbolName" style="font-family: myFont">原币种计价</span>
+                    </div>
+                </div>
+                <div id="cutlineContent" style="display: none">
+                    <div class="cutline">
+                        <div class="symbolColor"></div>
+                        <span class="symbolName">USDT</span>
+                    </div>
+                    <div class="cutline">
+                        <div class="symbolColor"></div>
+                        <span class="symbolName">USDT</span>
+                    </div>
+                    <div class="cutline">
+                        <div class="symbolColor"></div>
+                        <span class="symbolName">USDT</span>
+                    </div>
+                    <div class="cutline">
+                        <div class="symbolColor"></div>
+                        <span class="symbolName">USDT</span>
+                    </div>
+                    <div class="cutline">
+                        <div class="symbolColor"></div>
+                        <span class="symbolName">USDT</span>
+                    </div>
+                    <div class="cutline">
+                        <div class="symbolColor"></div>
+                        <span class="symbolName">USDT</span>
+                    </div>
+                    <div class="cutline">
+                        <div class="symbolColor"></div>
+                        <span class="symbolName">USDT</span>
+                    </div>
+                    <div class="cutline">
+                        <div class="symbolColor"></div>
+                        <span class="symbolName">USDT</span>
+                    </div>
+                    <div class="cutline">
+                        <div class="symbolColor"></div>
+                        <span class="symbolName">USDT</span>
+                    </div>
+                    <div class="cutline">
+                        <div class="symbolColor"></div>
+                        <span class="symbolName">USDT</span>
+                    </div>
+                    <div class="cutline">
+                        <div class="symbolColor"></div>
+                        <span class="symbolName">USDT</span>
+                    </div>
+                    <div class="cutline">
+                        <div class="symbolColor"></div>
+                        <span class="symbolName">USDT</span>
+                    </div>
+                    <div class="cutline">
+                        <div class="symbolColor"></div>
+                        <span class="symbolName">USDT</span>
+                    </div>
+                    <div class="cutline">
+                        <div class="symbolColor"></div>
+                        <span class="symbolName">USDT</span>
+                    </div>
+                    <div class="cutline">
+                        <div class="symbolColor"></div>
+                        <span class="symbolName">USDT</span>
+                    </div>
+                    <div class="cutline">
+                        <div class="symbolColor"></div>
+                        <span class="symbolName">USDT</span>
+                    </div>
+                    <div class="cutline">
+                        <div class="symbolColor"></div>
+                        <span class="symbolName">USDT</span>
+                    </div>
+                </div>
+                <div id="typeTips" style="display: none">
+                    <span>买币</span>
+                    <span>充币</span>
+                    <div>
+                        <span style="margin: 0px; height: 13px">币币</span>
+                        <span style="margin: 0px; margin-bottom: 2px; height: 13px">交易</span>
+                    </div>
+                    <span>卖币</span>
+                    <span>提币</span>
+                </div>
+                <div id="picDOut">
+                    <div style="width: calc(100% - 25px); height: 5px; background-color: #C18D4C; position: absolute; left: 13px; top: 10px; z-index: 1000"></div>
+                    <div id="picDLine" style="display: inline-block">
+                        <div id="picD">
+                            <div id="picDLeftBorder" style="width: 5px; height: 100%; position: absolute; left: 0px; z-index: 100; background-color: #CC9551"></div>
+                            <div id="picDRightBorder" style="width: 5px; height: 100%; position: absolute; left: 845px; z-index: 100; background-color: #CC9551"></div>
+                            <div id="separation"></div>
+                            <canvas id="behaviorLine" style="display: none">
+                                您的浏览器不支持Canvas，请升级浏览器
+                            </canvas>
+<!--                            <div class="behavior">-->
+<!--                                <div class="pole"></div>-->
+<!--                                <div class="usdt"></div>-->
+<!--                                <div class="pre"></div>-->
+<!--                                <div class="buy up not">-->
+<!--                                    <div class="light"></div>-->
+<!--                                </div>-->
+<!--                                <div class="charge up not">-->
+<!--                                    <div class="light"></div>-->
+<!--                                </div>-->
+<!--                                <div class="change up not">-->
+<!--                                    <div class="light"></div>-->
+<!--                                    <div class="left"></div>-->
+<!--                                    <div class="right"></div>-->
+<!--                                </div>-->
+<!--                                <div class="sell">-->
+<!--                                    <div class="light"></div>-->
+<!--                                </div>-->
+<!--                                <div class="withdraw">-->
+<!--                                    <div class="light"></div>-->
+<!--                                </div>-->
+<!--                            </div>-->
+                        </div>
+                    </div>
+<!--                    <div style="width: 5px; height: calc(100% - 30px); display: inline-block;"></div>-->
+                </div>
+            </div>
+        </div>
+
+        <div id="right" style="margin: 8px; margin-left: 0px; background-color: #FFFFFF">
+            <div class="navStripe">
+                <span class="glyphicon glyphicon-record"></span>原始交易记录
+            </div>
+            <div style="width: 100%; height: calc(100% - 43px); position:relative;">
+                <div id="preC">
+                    <div class="preCOut">
+                        <div class="preCContainer">
+                            <table class="preCContent">
+                                <tr style="text-align: center; border: none">
+                                    <td>交易序号</td>
+                                    <td>交易类型</td>
+                                </tr>
+                                <tr style="text-align: center; border: none">
+                                    <td class="value">23645</td>
+                                    <td class="value">买币</td>
+                                </tr>
+                                <tr>
+                                    <td style="padding-left: 5px" colspan="2">交易时间<span>2018-05023 09:03:24</span></td>
+                                </tr>
+                                <tr>
+                                    <td style="padding-left: 5px" colspan="2">交易地址<span style="font-size: 12px">SLUW3xXsbgdhggTygbbj36Tfy</span></td>
+                                </tr>
+                                <tr>
+                                    <td style="padding-left: 5px" colspan="2">转折原因<span>大额交易</span></td>
+                                </tr>
+                                <tr style="text-align: center; border: none">
+                                    <td>交易金额</td>
+                                    <td>交易币种</td>
+                                </tr>
+                                <tr style="text-align: center; border: none">
+                                    <td class="value">6791.6274</td>
+                                    <td class="value">ETH</td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                <div id="preD">
+                    <div class="preDOut">
+                        <div class="preDContainer">
+                            <table class="preDContent">
+                                <tr style="text-align: center; border: none">
+                                    <td>交易序号</td>
+                                    <td>交易类型</td>
+                                </tr>
+                                <tr style="text-align: center; border: none">
+                                    <td class="value">23645</td>
+                                    <td class="value">买币</td>
+                                </tr>
+                                <tr>
+                                    <td style="padding-left: 5px" colspan="2">交易时间<span>2018-05023 09:03:24</span></td>
+                                </tr>
+                                <tr>
+                                    <td style="padding-left: 5px" colspan="2">交易地址<span style="font-size: 12px">SLUW3xXsbgdhggTygbbj36Tfy</span></td>
+                                </tr>
+                                <tr style="text-align: center; border: none">
+                                    <td>交易金额</td>
+                                    <td>交易币种</td>
+                                </tr>
+                                <tr style="text-align: center; border: none">
+                                    <td class="value">6791.6274</td>
+                                    <td class="value">ETH</td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="preDOut">
+                        <div class="preDContainer">
+                            <table class="preDContent">
+                                <tr style="text-align: center; border: none">
+                                    <td>交易序号</td>
+                                    <td>交易类型</td>
+                                </tr>
+                                <tr style="text-align: center; border: none">
+                                    <td class="value">23645</td>
+                                    <td class="value">买币</td>
+                                </tr>
+                                <tr>
+                                    <td style="padding-left: 5px" colspan="2">交易时间<span>2018-05023 09:03:24</span></td>
+                                </tr>
+                                <tr>
+                                    <td style="padding-left: 5px" colspan="2">交易地址<span style="font-size: 12px">SLUW3xXsbgdhggTygbbj36Tfy</span></td>
+                                </tr>
+                                <tr style="text-align: center; border: none">
+                                    <td>交易金额</td>
+                                    <td>交易币种</td>
+                                </tr>
+                                <tr style="text-align: center; border: none">
+                                    <td class="value">6791.6274</td>
+                                    <td class="value">ETH</td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="preDOut">
+                        <div class="preDContainer">
+                            <table class="preDContent">
+                                <tr style="text-align: center; border: none">
+                                    <td>交易序号</td>
+                                    <td>交易类型</td>
+                                </tr>
+                                <tr style="text-align: center; border: none">
+                                    <td class="value">23645</td>
+                                    <td class="value">买币</td>
+                                </tr>
+                                <tr>
+                                    <td style="padding-left: 5px" colspan="2">交易时间<span>2018-05023 09:03:24</span></td>
+                                </tr>
+                                <tr>
+                                    <td style="padding-left: 5px" colspan="2">交易地址<span style="font-size: 12px">SLUW3xXsbgdhggTygbbj36Tfy</span></td>
+                                </tr>
+                                <tr style="text-align: center; border: none">
+                                    <td>交易金额</td>
+                                    <td>交易币种</td>
+                                </tr>
+                                <tr style="text-align: center; border: none">
+                                    <td class="value">6791.6274</td>
+                                    <td class="value">ETH</td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="preDOut">
+                        <div class="preDContainer">
+                            <table class="preDContent">
+                                <tr style="text-align: center; border: none">
+                                    <td>交易序号</td>
+                                    <td>交易类型</td>
+                                </tr>
+                                <tr style="text-align: center; border: none">
+                                    <td class="value">23645</td>
+                                    <td class="value">买币</td>
+                                </tr>
+                                <tr>
+                                    <td style="padding-left: 5px" colspan="2">交易时间<span>2018-05023 09:03:24</span></td>
+                                </tr>
+                                <tr>
+                                    <td style="padding-left: 5px" colspan="2">交易地址<span style="font-size: 12px">SLUW3xXsbgdhggTygbbj36Tfy</span></td>
+                                </tr>
+                                <tr style="text-align: center; border: none">
+                                    <td>交易金额</td>
+                                    <td>交易币种</td>
+                                </tr>
+                                <tr style="text-align: center; border: none">
+                                    <td class="value">6791.6274</td>
+                                    <td class="value">ETH</td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                <div name="separation" style="width: 95%; height: 3px; position: absolute; left: 0; top: calc(25% + 3px); background-color: #898989"></div>
+            </div>
+        </div>
+    </div>
+
+    <script type="text/javascript">
+        drawTimeLine();
+        run();
+        let ifUp = false;
+        let longClick = null
+        let ifDraw = false
+
+        $(function (){
+            let member_id = $("#rank > tr > td").html();
+            console.log(member_id)
+            chooseMember(member_id);
+
+            $("#toggle-button").change(function (){
+                if ($(this).is(":checked")){
+                    $(".behavior .up.not").removeClass("not")
+                    drawDLine(true)
+                }else{
+                    $(".behavior .up").addClass("not")
+                    drawDLine(false)
+                }
+            })
+
+            document.getElementById("picD").ondblclick = function () {
+                ifUp = !ifUp
+                drawDLine(ifUp)
+                if (ifUp) {
+                    $(".behavior .up.not").removeClass("not")
+                }else{
+                    $(".behavior .up").addClass("not")
+                }
+            }
+
+            document.getElementById("picD").onmousedown = function (event) {
+                if (event.button == 0){
+                    longClick = setTimeout(()=>{
+                        ifDraw = !ifDraw
+                        if (ifDraw) {
+                            document.getElementById("behaviorLine").style.display= "block"
+                            drawDLine(ifUp)
+                        }else{
+                            document.getElementById("behaviorLine").style.display= "none"
+                        }
+                    }, 1500)
+                }
+            }
+            document.getElementById("picD").onmouseup = function (event) {
+                if (event.button == 0){
+                    if (longClick != null) {
+                        clearTimeout(longClick)
+                    }
+                }
+            }
+
+            drawD(false, 0, 0,new Date(2020, 12, 20), new Date(2020, 12, 20), 3, "usdt", 3, 0, 2)
+            drawD(false, 0, 0,new Date(2020, 12, 20, 1), new Date(2020, 12, 20), 3, "usdt", 1, 1, 2)
+            drawD(false, 0, 0,new Date(2020, 12, 20, 0, 0, 1), new Date(2020, 12, 20), 0, "usdt", 3, 2, 2)
+            drawD(false, 0, 0,new Date(2020, 12, 20, 0, 1, 0), new Date(2020, 12, 20), 3, "usdt", 1, 3)
+            drawD(false, 0, 0,new Date(2020, 12, 20, 1, 0, 0), new Date(2020, 12, 20), 1, "usdt", 6, 4, 2)
+            drawD(false, 0, 0,new Date(2020, 12, 20, 0, 1, 0), new Date(2020, 12, 20), 5, "usdt", 1, 5)
+            drawD(false, 0, 0,new Date(2020, 12, 20, 1, 0, 1), new Date(2020, 12, 20), 4, "usdt", 2, 6, 2)
+            drawD(false, 0, 0,new Date(2020, 12, 20), new Date(2020, 12, 18), 3, "usdt", 1, 7, 2)
+            drawD(false, 0, 0,new Date(2020, 12, 20), new Date(2020, 12, 19), 5, "usdt", 8, 8, 2)
+            drawD(false, 0, 0,new Date(2020, 12, 20), new Date(2020, 12, 20), 0, "usdt", 1, 9)
+            drawD(false, 0, 0,new Date(2020, 12, 20), new Date(2020, 12, 2), 1, "usdt", 3, 10, 2)
+            drawD(false, 0, 0,new Date(2020, 12, 20), new Date(2019, 12, 20), 4, "usdt", 8, 11, 2)
+            if (centers[centers.length - 1]["x"] + 24 > 668 - 10){
+                // document.getElementById("picDLine").style.width = centers[centers.length - 1]["x"] + 49 + "px"
+                document.getElementById("picD").style.width = centers[centers.length - 1]["x"] + 39 + "px"
+            }
+
+            drawDLine(false)
+            document.getElementById("picDLine").onscroll = function (event){
+                let offset = this.scrollLeft
+                document.getElementById("picDLeftBorder").style.left = offset + "px"
+                document.getElementById("picDRightBorder").style.left = 845 + offset + "px"
+            }
+            document.getElementById("back").getElementsByTagName("img")[0].onclick = function () {
+                let preWidth = document.getElementById("picC").clientWidth
+                document.getElementById("picC").style.width = preWidth * 2 + "px"
+                run()
+                clickFlag = 0
+                document.getElementById("otherPicC").style.display = "none"
+                document.getElementById("back").style.display = "none"
+            }
+        })
+    </script>
+</body>
+</html>

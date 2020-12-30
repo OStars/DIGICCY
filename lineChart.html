@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>折线图</title>
+        <script type="text/javascript" src="./plug/d3.js"></script>
+    </head>
+    <body>
+        <script type="text/javascript">
+            var dataset1 = [ {x:0,y:0},
+                            {x: 10, y: 11}, {x: 20, y: 35},
+                            {x: 30, y: 23}, {x: 40, y: 78},
+                            {x: 50, y: 55}, {x: 60, y: 18},
+                            ];
+            
+            var dataset2 = [{x:0,y:0},
+                            {x: 10, y: 1}, {x: 20, y: 10},
+                            {x: 30, y: 20}, {x: 40, y: 18},
+                            {x: 50, y: 5}, {x: 60, y: 5},
+                            ];
+            var dataset3 = [{x:0,y:0},
+                            {x: 10, y: 4}, {x: 20, y: 16},
+                            {x: 30, y: 2}, {x: 40, y: 30},
+                            {x: 50, y: 31}, {x: 60, y: 6}
+                            ];
+            
+            var dataset4 = [{x:0,y:0},
+                            {x: 10, y: 6}, {x: 20, y: 9},
+                            {x: 30, y: 1}, {x: 40, y: 30},
+                            {x: 50, y: 19}, {x: 60, y: 7},
+                            ];
+            var dataset5 = [{x:0,y:20},
+                            {x: 10, y: 45}, {x: 20, y: 47},
+                            {x: 30, y: 32}, {x: 40, y: 30},
+                            {x: 50, y: 19}, {x: 60, y: 7},
+                            ];
+            
+            var dataAll=[dataset1,dataset2,dataset3,dataset4];
+            var label=["BTC","LTC","SLU","DOGE"];
+            
+            var colors=["red","green","blue","orange"];
+            
+            var w=450;
+			var h=250;
+            var padding=50;
+
+            var max=d3.max(dataAll[0],function(d){
+                                return d.x;
+                            })
+            
+
+            var svg=d3.select("body")
+                    .append("svg")
+                    .attr("width",w)
+                    .attr("height",h);
+
+
+            	//Create scale functions
+			var xScale = d3.scaleLinear()   //线性比例尺
+								 .domain([0, d3.max(dataAll[0], function(d) { return d.x; })])
+								 .range([padding, w - padding * 2]);
+
+			var yScale = d3.scaleLinear()
+								 .domain([0, d3.max(dataAll[0], function(d) { return d.y; })])
+								 .range([h-padding, padding]);
+            //创建x轴和y轴
+            var xAxis = d3.axisBottom()
+						.scale(xScale)
+						.ticks(max/10);  //自动最优化
+	
+			var yAxis=d3.axisLeft()
+			   			.scale(yScale)
+						.ticks(5);
+
+            svg.append("g")
+				.attr("class", "x_Axis")
+				.attr("transform", "translate(0," + (h - padding) + ")")
+				.call(xAxis); //call会取得传递过来的元素，把他交给其他函数
+			
+			
+			svg.append("g")
+				 .attr("class","y_Axis")
+				 .attr("transform","translate("+padding+",0)")
+				 .call(yAxis);
+          
+         for(var i=0;i<dataAll.length;i++){
+            // 添加折线
+            var line = d3.line()
+                .x(function(d) {
+                return xScale(d.x)
+                })
+                .y(function(d) {
+                return yScale(d.y);
+                });
+                // .curve(d3.curveCardinal);
+             
+                
+                // 选择线条的类型
+              
+            // 添加path元素，并通过line()计算出值来赋值
+            svg.append('path')
+                // .attr('class', 'line')
+                .attr('d', line(dataAll[i]))
+                .attr("fill","none")
+                .attr("stroke",colors[i])
+                .attr("stroke-width","2");
+            }     
+            
+            for(var i=0;i<dataAll.length;i++){
+                for(var j=0;j<dataset1.length;j++){
+                    svg.append("circle")
+                    .attr("cx",xScale(dataAll[i][j].x))
+                    .attr("cy",yScale(dataAll[i][j].y))
+                    .attr("r",3)
+                    .attr("fill",colors[i]);
+                }
+            }
+
+            for(var i=0;i<dataAll.length;i++){
+                svg.append('rect')
+                .attr("x",w-2*padding)
+                .attr("y",padding+i*20)
+                .attr("width",20)
+                .attr("height",10)
+                .attr("fill",colors[i]);
+
+                svg.append('text')
+                .text(label[i])
+                .attr("x",w-2*padding+21)
+                .attr("y",padding+i*20+7)
+                .attr("height",10)
+                .attr("fill",colors[i])
+                // .attr("text-anchor","middle")  //x表示文本的居中位置
+				  .attr("font-family", "sans-serif")
+				  .attr("font-size", "11px")
+				  .attr("fill", "black");
+
+            }
+
+            svg.append('text')
+            .text("时间/天")
+            .attr("x",w-1.5*padding)
+            .attr("y",h-padding)
+            .attr("text-anchor","middle")  //x表示文本的居中位置
+		    .attr("font-family", "sans-serif")
+			.attr("font-size", "11px")
+			.attr("fill", "black")
+            .attr("font-weight","bold");
+
+            svg.append('text')
+            .text("金额/USDT")
+            .attr("x",padding)
+            .attr("y",0.8*padding)
+            .attr("text-anchor","middle")  //x表示文本的居中位置
+		    .attr("font-family", "sans-serif")
+			.attr("font-size", "11px")
+			.attr("fill", "black")
+            .attr("font-weight","bold");
+        </script>
+    </body>
+</html>

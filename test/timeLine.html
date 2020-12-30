@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>timeLineTest</title>
+
+    <script rel="script" src="../plug/d3.js"></script>
+
+    <style>
+        .x_Axis, .y_Axis{
+            fill: none;
+            /*stroke: black;*/
+            /*shape-rendering: optimizeSpeed;*/
+            font-size: 6px;
+        }
+    </style>
+</head>
+<body>
+    <script>
+        let padding = 20;
+        let width = 310;
+        let height = 100;
+        let dataset = [];
+
+        for (let i = 1; i <= 72; i++) {
+            dataset.push({x: i, y: Math.random()*101})
+        }
+
+        let color = "#CCCCFF";
+
+        let x_max = d3.max(dataset, function (data){
+            return data.x;
+        })
+
+        let y_max = 100
+
+        let svg = d3.select("body")
+            .append("svg")
+            .attr("width", width)
+            .attr("height",height);
+
+        //Create scale functions
+        let xScale = d3.scaleLinear()   //线性比例尺
+            .domain([0, x_max])
+            .range([padding*2, width - padding * 2]);
+
+        let yScale = d3.scaleLinear()
+            .domain([0, y_max])
+            .range([height - padding, padding]);
+
+        //创建x轴和y轴
+        let xAxis = d3.axisBottom()
+            .scale(xScale)
+            .ticks(x_max / 10);  //自动最优化
+
+        let yAxis=d3.axisLeft()
+            .scale(yScale)
+            .ticks(5);
+
+        svg.append("g")
+            .attr("class", "x_Axis")
+            .attr("transform", "translate(0," + (height - padding) + ")")
+            .call(xAxis); //call会取得传递过来的元素，把他交给其他函数
+
+
+        svg.append("g")
+            .attr("class","y_Axis")
+            .attr("transform","translate(" + padding*2 + ",0)")
+            .call(yAxis);
+
+        let line = d3.line()
+            .x(function(d) {
+                return xScale(d.x)
+            })
+            .y(function(d) {
+                return yScale(d.y);
+            });
+
+        svg.append('path')
+            // .attr('class', 'line')
+            .attr('d', line(dataset))
+            .attr("fill","none")
+            .attr("stroke", color)
+            .attr("stroke-width","2");
+
+        svg.append('text')
+            .text("时间窗序号")
+            .attr("x",width-1.5*padding)
+            .attr("y",height-padding*1.2)
+            .attr("text-anchor","middle")  //x表示文本的居中位置
+            .attr("font-family", "sans-serif")
+            .attr("font-size", "7px")
+            .attr("fill", "black")
+            .attr("font-weight","bold");
+
+        svg.append('text')
+            .text("各时间窗洗钱值")
+            .attr("x", padding*1.5)
+            .attr("y", 0.6*padding)
+            .attr("text-anchor","middle")  //x表示文本的居中位置
+            .attr("font-family", "sans-serif")
+            .attr("font-size", "7px")
+            .attr("fill", "black")
+            .attr("font-weight","bold");
+    </script>
+</body>
+</html>
