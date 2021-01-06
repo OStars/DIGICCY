@@ -347,6 +347,7 @@ function drawB(dataset){
         index++
     }
 }
+
 function drawOtherC(dataset){
     d3.select("#otherC").remove()
     let padding = 20;
@@ -370,7 +371,7 @@ function drawOtherC(dataset){
         return data.create_time;
     })
 
-    let arr_key = dataset.map(d => +d['f1'])
+    let arr_key = dataset.map(d => +d['3_amount'])
     let y_max = d3.max(arr_key)
     let y_min = d3.min(arr_key)
 
@@ -488,7 +489,11 @@ function drawD(up, usdt, pre, time, pre_time, type, symbol, count, index, event=
     let length = timeToLengthMap(time, pre_time);
     let color = symbolToColorMap(symbol)
     let item = typeToItemMap(type)
-    console.log(index)
+    // let preHeight = amountToHeightMap(pre, dMaxPre, dMinPre)
+    let preHeight = amountToHeightMap(pre, dMax, dMin)
+    // let usdtHeight = amountToHeightMap(usdt, dMaxUsdt, dMinUsdt)
+    let usdtHeight = amountToHeightMap(usdt, dMax, dMin)
+    // console.log(index)
 
     let content = '<div class="behavior">\n' +
         '                                <div class="pole"></div>\n' +
@@ -513,9 +518,9 @@ function drawD(up, usdt, pre, time, pre_time, type, symbol, count, index, event=
 
     let obj = $(content)
     $("#picD").append(obj);
-    console.log(obj)
-    obj.find(".usdt").css("top", "calc(30% - 8px - "+amountToHeightMap(0)+"px)")
-    obj.find(".pre").css("top", "calc(30% - 8px - "+amountToHeightMap(0)+"px)")
+    // console.log(obj)
+    obj.find(".usdt").css("top", "calc(30% - 8px - "+/*amountToHeightMap(0)*/usdtHeight+"px)")
+    obj.find(".pre").css("top", "calc(30% - 8px - "+/*amountToHeightMap(0)*/preHeight+"px)")
     let preLeft = 15
     if (index != 0) {
         preLeft = Number(document.getElementsByClassName("behavior")[index-1].style.left.replace("px", ""))
@@ -526,6 +531,7 @@ function drawD(up, usdt, pre, time, pre_time, type, symbol, count, index, event=
     }else{
         document.getElementsByClassName("behavior")[index].style.left = preLeft + "px"
     }
+    // console.log(item)
     document.getElementsByClassName(item)[index].style.backgroundColor = randomColor()
     if (count != 1){
         document.getElementsByClassName(item)[index].innerHTML = count
@@ -584,8 +590,12 @@ function drawDLine(up){
     context.stroke()
 }
 
-function amountToHeightMap(amount) {
-    return Math.random()*75
+function amountToHeightMap(amount, max, min) {
+    if (amount < 0){
+        amount = -amount
+    }
+    let proportion = (amount - min) / (max - min)
+    return 75 * proportion
 }
 
 function timeToLengthMap(time, preTime){
@@ -602,7 +612,7 @@ function timeToLengthMap(time, preTime){
     }
     // let timeDiff = new Date(time).getTime() - new Date(preTime).getTime()
     let timeDiff = time.getTime() - preTime.getTime()
-    console.log(timeDiff)
+    // console.log(timeDiff)
     let length = 0
     if (timeDiff < 1000){
         length = timeToLength['seconds']
@@ -634,15 +644,15 @@ function symbolToColorMap(symbol){
 }
 
 function typeToItemMap(type){
-    if (type == 0){
+    if (type == 0 || type == "0"){
         return "charge"
-    }else if (type == 1){
+    }else if (type == 1 || type == "1"){
         return "withdraw"
-    }else if (type == 3){
+    }else if (type == 3 || type == "3"){
         return "change"
-    }else if (type == 4){
+    }else if (type == 4 || type == "4"){
         return "buy"
-    }else if (type == 5){
+    }else if (type == 5 || type == "5"){
         return "sell"
     }
 }
@@ -670,6 +680,169 @@ function randomColor() {
         "rgb(254,190,111)"]
 
     return colors[Math.floor(Math.random()*10)]
+}
+
+function getCData(member_id) {
+    $.ajax({
+        //访问服务器。从本地服务器跳转到远程访问的服务器
+        // url: "http://182.92.122.230/whole_data/member_id=69863&create_time=80",
+        // url: "http://182.92.122.230/member_id=69863&create_time=1&data_type=3_amount",
+        url: "http://182.92.122.230/member_rest_symbol/member_id="+member_id,
+        type: "get",
+        dataType: "jsonp",
+        jsonp: "callback",
+        jsonpCallback: "callback",
+        data: {},
+        success: function (data) {
+            console.log(data)
+            // {
+            //     "name": "BTC",
+            //     "id": 4,
+            //     "fillcolor": "rgb(49,160,44)",
+            //     "size": [
+            //         51,
+            //         29,
+            //     ]
+            // }
+            let res = []
+            let symbols = []
+            for (let i = 0; i < data.length; i++) {
+                if (data[i].create_time == data[i+1].create_time)  {
+                    symbols.push(data[i].symbol)
+                }else{
+                    symbols.push(data[i].symbol)
+                    break
+                }
+            }
+            for (let i = 0; i < symbols.length; i++) {
+                let item = {
+                    "name": symbols[i],
+                    "id": i,
+                    "fillcolor": randomColor(),
+                    "size": []
+                }
+                let lastRest = 0
+                let count = 1
+                for (let j = data[0].create_time; j <= data[data.length-1].create_time; j++) {
+                    let record = data[(count-1)*symbols.length + i]
+                    // console.log((j-1)*symbols.length + i)
+                    // console.log(record)
+                    // record.rest = Number(record.rest)
+                    record["rest_ nonnegative"] = Number(record["rest_ nonnegative"])
+                    if (record.create_time == j){
+                        // item['size'].push(record.rest)
+                        item['size'].push(record["rest_ nonnegative"])
+                        // lastRest = record.rest
+                        lastRest = record["rest_ nonnegative"]
+                        count++
+                    }else{
+                        item['size'].push(lastRest)
+                    }
+                    // console.log(item)
+                }
+                res.push(item)
+            }
+            console.log(res)
+            processData(res, 0, DATA_PATH[0])
+        },
+        error: function (err){
+            console.log(err)
+        }
+        // complete: function (xhr, ts){
+        //     console.log(xhr)
+        //     console.log(ts)
+        // }
+    });
+}
+
+let dMaxUsdt = 0;
+let dMinUsdt = 0;
+let dMaxPre = 0;
+let dMinPre = 0;
+let dMax = 0;
+let dMin = 0;
+function getDData(member_id) {
+    $.ajax({
+        //访问服务器。从本地服务器跳转到远程访问的服务器
+        // url: "http://182.92.122.230/whole_data/member_id=69863&create_time=80",
+        // url: "http://182.92.122.230/member_id=69863&create_time=1&data_type=3_amount",
+        url: "http://182.92.122.230/picD_data/member_id="+member_id,
+        type: "get",
+        dataType: "jsonp",
+        jsonp: "callback",
+        jsonpCallback: "callback",
+        data: {},
+        success: function (data) {
+            behaviors = []
+            centers = []
+            console.log(data)
+            // {
+            //     "name": "BTC",
+            //     "id": 4,
+            //     "fillcolor": "rgb(49,160,44)",
+            //     "size": [
+            //         51,
+            //         29,
+            //     ]
+            // }
+            for (let i = 0; i < data.length; i++) {
+                data[i].pre = Number(data[i].pre)
+                data[i].usdt = Number(data[i].usdt)
+                if (data[i].pre < 0){
+                    data[i].pre = -data[i].pre
+                }
+                if (data[i].usdt < 0){
+                    data[i].usdt = -data[i].usdt
+                }
+                // if (data[i].pre < dMinPre){
+                //     dMinPre = data[i].pre
+                // }
+                // if (data[i].pre > dMaxPre){
+                //     dMaxPre = data[i].pre
+                // }
+                // if (data[i].usdt < dMinUsdt){
+                //     dMinUsdt = data[i].usdt
+                // }
+                // if (data[i].usdt > dMaxPre){
+                //     dMaxUsdt = data[i].usdt
+                // }
+                if (data[i].pre < dMin){
+                    dMin = data[i].pre
+                }
+                if (data[i].pre > dMax){
+                    dMax = data[i].pre
+                }
+                if (data[i].usdt < dMin){
+                    dMin = data[i].usdt
+                }
+                if (data[i].usdt > dMax){
+                    dMax = data[i].usdt
+                }
+            }
+            // console.log(dMaxUsdt, dMinUsdt, dMaxPre, dMinPre)
+            // console.log(dMax, dMin)
+            d3.selectAll(".behavior").remove()
+            for (let i = 0; i < data.length; i++) {
+                let item = data[i]
+                if (i == 0){
+                    drawD(false, item.usdt, item.pre, new Date(item.time), new Date(item.time), item.type, item.symbol, item.count, i, item.event, item.symbol_new)
+                }else{
+                    drawD(false, item.usdt, item.pre, new Date(item.time), new Date(data[i-1].time), item.type, item.symbol, item.count, i, item.event, item.symbol_new)
+                }
+            }
+            if (centers[centers.length - 1]["x"] + 24 > 852 - 10){
+                // document.getElementById("picDLine").style.width = centers[centers.length - 1]["x"] + 49 + "px"
+                document.getElementById("picD").style.width = centers[centers.length - 1]["x"] + 39 + "px"
+            }
+        },
+        error: function (err){
+            console.log(err)
+        }
+        // complete: function (xhr, ts){
+        //     console.log(xhr)
+        //     console.log(ts)
+        // }
+    });
 }
 
 
