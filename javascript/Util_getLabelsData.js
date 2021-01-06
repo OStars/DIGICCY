@@ -140,15 +140,15 @@ function getLabelsData(layers, graphIndex) {
             }
         }
 
-        if (thisFontSize < min_Label_FontSize) {
-            // final_X = width / 2
-            // final_Y = linearY(layers[i].yTop[Math.round(layers[i].yTop.length / 2)])
-            final_X = 0
-            final_Y = 0
-            final_FontSize = 0;
-            thisLabelWidth_Graph = 0
-            thisLabelHeight_Graph = 0
-        }
+        // if (thisFontSize < min_Label_FontSize) {
+        //     // final_X = width / 2
+        //     // final_Y = linearY(layers[i].yTop[Math.round(layers[i].yTop.length / 2)])
+        //     final_X = 0
+        //     final_Y = 0
+        //     final_FontSize = 0;
+        //     thisLabelWidth_Graph = 0
+        //     thisLabelHeight_Graph = 0
+        // }
 
 
         let thisLabelData = {};
@@ -161,9 +161,9 @@ function getLabelsData(layers, graphIndex) {
         thisLabelData.height = thisLabelHeight_Graph;
 
         var color = layers[i].fillcolor;
-        console.log(color)
+        // console.log(color)
         var values = color.substring(4, color.length - 1).split(",");
-        console.log(values)
+        // console.log(values)
         var red = parseInt(values[0]) / 255,
             green = parseInt(values[1]) / 255,
             blue = parseInt(values[2]) / 255,
@@ -173,7 +173,7 @@ function getLabelsData(layers, graphIndex) {
             .2126 * Math.pow(red, gamma) +
             .7152 * Math.pow(green, gamma) +
             .0722 * Math.pow(blue, gamma);
-        console.log(intensity)
+        // console.log(intensity)
         thisLabelData.lableColor = (intensity > 0.3 ? "black" : "white");
         // thisLabelData.opacity = (intensity > 0.3 ? 0.5 : 0.7);
         thisLabelData.opacity = 1;

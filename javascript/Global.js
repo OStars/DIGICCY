@@ -71,9 +71,8 @@ class Layer {
         this.fillcolor = fillcolor === undefined ? getRandomColorRGB() : fillcolor;
         size.forEach(function (d) {
             if (d < 0) {
-                console.log(name);
-                console.log(size);
-
+                // console.log(name);
+                // console.log(size);
             }
         })
         this.size = size.map(d => d);
@@ -86,4 +85,4 @@ class Layer {
 }
 
 let fill_colors = []
-let clickFlag = 0
+let clickFlag = -1

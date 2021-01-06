@@ -414,7 +414,8 @@ text {
 }
 
 #picD {
-    width: calc(100% - 10px);
+    /*width: calc(100% - 10px);*/
+    width: 100%;
     height: calc(100% - 10px);
     position: relative;
     left: 0px;
