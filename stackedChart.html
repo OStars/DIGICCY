@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <!-- <p style="font-size: 20px;color: red;">使用a标签方式将json导出csv文件</p>
+  <button onclick='tableToExcel()'>导出</button> -->
+  <script type="text/javascript" src="./plug/d3.js"></script>
+</head>
+<body>
+    <div id="top"></div>
+    <div id="bottom"></div>
+  <script type="text/javascript">
+            
+     
+        var w = 1150;
+        var h = 210;
+        var padding=50;
+        var startTime="2018/1/1";
+        var endTime= "2020/3/1";
+       
+                // var dataset_1=[];
+                d3.csv("./dataset/dataset.csv",function(d) {
+                  return{
+                  date:d.date.trim(),
+                  BTC:parseInt(d.btc.trim()),
+                  LTC:parseInt(d.ltc.trim()),
+                  SLU:parseInt(d.slu.trim()),
+                  DOGE:parseInt(d.doge.trim())
+                  }
+                  }).then(function(dataset){
+                    // console.log(dataset_1);
+                   
+                var colors = ["#e76f51", "#f4a261","#e9c46a","#2a9d8f"];
+                //Set up stack method
+                var stack = d3.stack().keys(["BTC", "LTC","SLU","DOGE"]);                        
+                var series = stack(dataset);
+                //堆叠面积图
+                var svg1=d3.select("#top")
+                        .append("svg")
+                        .attr("width",w)
+                        .attr("height",h);
+                
+    //Create scale functions
+                var xScale = d3.scaleTime()   //线性比例尺
+                                    .domain([new Date(startTime),new Date(endTime)])
+                                    .range([padding, w - padding * 2]);
+
+                //创建x轴和y轴
+                var xAxis = d3.axisBottom()
+                            .scale(xScale)
+                            .tickFormat(d3.timeFormat("%Y-%m-%d"))
+                            .tickValues([new Date(startTime),new Date(endTime)]);  //自动最优化
+                
+                var yScale = d3.scaleLinear()
+                    .domain([0,d3.max(dataset.map((d)=>d.LTC+d.SLU+d.BTC+d.DOGE))])				
+                    .range([h-padding, 0]);  // <-- Flipped vertical scale
+                
+                var yAxis = d3.axisLeft()
+                            .scale(yScale)
+                            .ticks(0);
+                
+                var stackedData = [];
+                // Copy the stack offsets back into the data.
+                series.forEach((layers, index) => {
+                var currentStack = [];
+                layers.forEach((d, i) => {
+                    // console.log(d);
+                    currentStack.push({
+                    values: d,
+                    date: new Date(dataset[i].date)
+                    });
+                });
+                stackedData.push(currentStack);
+                });
+
+                for(var i=0;i<4;i++){
+                svg1.append("path")
+                .datum(stackedData[i])   
+                .attr("fill", colors[i])
+                .attr("stroke", colors[i])
+                .attr("stroke-linejoin", "round")
+                .attr("stroke-linecap", "round")
+                .attr("stroke-width", 1.5)
+                .attr("d",  d3.area()
+                            .x(function(d){
+                                //  console.log(d.year);
+                                return xScale(d.date)})
+                            .y0(function(d) {
+                                // console.log(d.values[0]);
+                                return yScale(d.values[0]); })
+                            .y1(function(d) {
+                                // console.log(d.values[1]);
+                                return yScale(d.values[1]);})
+                            .curve(d3.curveCardinal));
+                }
+
+
+                svg1.append("g")
+                    .attr("class", "x_Axis")
+                    .attr("transform", "translate(0," + (h - padding) + ")")
+                    .call(xAxis); //call会取得传递过来的元素，把他交给其他函数
+
+                svg1.append("g")
+                    .attr("class","y_Axis")
+                    .attr("transform","translate("+padding+",0)")
+                    .call(yAxis);
+
+
+                //堆叠折线图
+                var svg2=d3.select("#bottom")
+                        .append("svg")
+                        .attr("width",w)
+                        .attr("height",h);
+
+
+                //Set up scales
+                var xScale = d3.scaleBand()
+                    .domain(dataset.map((d)=>d.date))
+                    .range([padding, w-padding])
+                    .paddingInner(0.05);
+                // console.log(xScale("2018/1/1"));
+
+                var yScale = d3.scaleLinear()
+                    .domain([0,d3.max(dataset.map((d)=>d.LTC+d.SLU+d.BTC+d.DOGE))])				
+                    .range([h-padding, 0]);  // <-- Flipped vertical scale
+    
+
+                // Add a group for each row of data
+                var groups = svg2.selectAll("g")
+                    .data(series)
+                    .enter()
+                    .append("g")
+                    .style("fill", function(d, i) {
+                        return colors[i];
+                    });
+
+                // Add a rect for each data value
+                var rects = groups.selectAll("rect")
+                    .data(function(d) { return d; })
+                    .enter()
+                    .append("rect")
+                    .attr("x", function(d) {
+                        return xScale(d.data.date);
+                    })
+                    .attr("y", function(d) {
+                        return yScale(d[1]);  // <-- Changed y value
+                    })
+                    .attr("height", function(d) {
+                        return yScale(d[0]) - yScale(d[1]);  // <-- Changed height value
+                    })
+                    .attr("width", xScale.bandwidth());
+                            
+
+
+                var xAxis = d3.axisBottom()
+                            .scale(xScale)
+                            .tickValues([startTime,endTime]);  //自动最优化
+                        
+                    svg2.append("g")
+                    .attr("class", "x_Axis")
+                    .attr("transform", "translate(0," + (h - padding) + ")")
+                    .call(xAxis); //call会取得传递过来的元素，把他交给其他函数
+                    var yAxis = d3.axisLeft()
+                            .scale(yScale)
+                            .ticks(0);
+                    svg2.append("g")
+                    .attr("class","y_Axis")
+                    .attr("transform","translate("+padding+",0)")
+                    .call(yAxis);
+                  });
+                   
+    
+              
+
+ 
+</script>
+</body>
+</html>
+
