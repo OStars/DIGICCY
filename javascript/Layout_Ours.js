@@ -211,6 +211,7 @@ function HierarchicalClusteringOrder(layers, weightType = "max") {
                 }
             }
 
+            // console.log(layerNodes[layerToPick_A])
             layerNodes.push(new LayerNode(curIndex, layerNodes[layerToPick_A], layerNodes[layerToPick_B]))
             curIndex++;
 

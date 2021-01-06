@@ -25,7 +25,7 @@ function run() {
     div_width = parseFloat(d3.select("#picC").style("width").replace("px", "")) * 0.95
     // div_width = parseFloat(d3.select("#div_streamgraph").style("width").replace("px", "")) * 0.23
     // div_width = parseFloat(d3.select("#div_streamgraph").style("width").replace("px", "")) * 0.45
-    // div_width = 800
+    // div_width = 400
 
     //the margin of streamgraph in the div
     margin_k = 0.95
@@ -34,7 +34,8 @@ function run() {
     height = 420 * margin_k * radio
     margin.left = margin.right = div_width * (1 - margin_k) / 2
     margin.top = margin.bottom = div_width * radio * (1 - margin_k) / 2
-    readLocalData(0)
+    // readLocalData(0)
+    getCData(69863)
 }
 
 
@@ -65,14 +66,16 @@ function processData(d, index, name) {
     LayerID = 0;
     for (let i = 0; i < d.length; i++) {
         let curSize = d[i].size.slice(0)
+        // console.log(curSize)
         if (d3.sum(curSize) === 0) {
             continue
         }
         currentLayers.push(new Layer(d[i].name, curSize, d[i].fillcolor));
     }
-    // currentLayers.reverse()
+    currentLayers.reverse()
     initialLayers.push(A_Copy_Of(currentLayers));
 
+    console.log(currentLayers)
     drawGaph(index, currentLayers, name);
 
 }
@@ -150,11 +153,12 @@ function drawGaph(index, currentLayers, name) {
             }
         }
         paths[i].onclick = function () {
-            if (clickFlag==0){
+            if (clickFlag==-1){
                 let preWidth = document.getElementById("picC").clientWidth
                 document.getElementById("picC").style.width = preWidth / 2 + "px"
                 run()
                 clickFlag = i
+                console.log(clickFlag)
                 document.getElementById("otherPicC").style.display = "block"
                 document.getElementById("back").style.display = "block"
                 drawOtherC(testData)
@@ -162,7 +166,7 @@ function drawGaph(index, currentLayers, name) {
                 let preWidth = document.getElementById("picC").clientWidth
                 document.getElementById("picC").style.width = preWidth * 2 + "px"
                 run()
-                clickFlag = 0
+                clickFlag = -1
                 document.getElementById("otherPicC").style.display = "none"
                 document.getElementById("back").style.display = "none"
             }
